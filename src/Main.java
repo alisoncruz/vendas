@@ -1,5 +1,6 @@
 import db.ProdutoDB;
-import models.Produto;
+import db.UsuarioDB;
+import models.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +10,7 @@ import java.util.Scanner;
 
 public class Main {
     static ProdutoDB produtoDB = new ProdutoDB();
+    static UsuarioDB usuarioDB = new UsuarioDB();
 
     public static void main(String[] args) {
 
@@ -21,6 +23,9 @@ public class Main {
         do {
             System.out.println("\n1 - Cadastrar produto");
             System.out.println("2 - Listar produtos cadastrados");
+            System.out.println("3 - Cadastrar usuário ADMINISTRADOR");
+            System.out.println("4 - Cadastrar usuário CLIENTE");
+            System.out.println("5 - Listar usuários cadastrados");
             System.out.println("0 - Sair");
 
             Scanner scanner = new Scanner(System.in);
@@ -42,6 +47,15 @@ public class Main {
                 break;
             case 2:
                 listarProdutos();
+                break;
+            case 3:
+                cadastrarUsuario(TipoUsuario.ADMIN);
+                break;
+            case 4:
+                cadastrarUsuario(TipoUsuario.CLIENTE);
+                break;
+            case 5:
+                listarUsuarios();
                 break;
             case 0:
                 System.out.println("Encerrando...");
@@ -71,14 +85,14 @@ public class Main {
         int id = scanner.nextInt();
 
         Produto produto = new Produto();
-        produto.setId(1);
-        produto.setDescricao("Celular");
+        produto.setId(id);
+        produto.setDescricao(descricao);
         produto.setDataValidade(dataValidade);
         produto.setPreco(preco);
 
         produtoDB.addNovoProduto(produto);
         System.out.println("Produto criado com sucesso");
-        
+
     }
 
     public static void listarProdutos() {
@@ -93,4 +107,32 @@ public class Main {
             System.out.println("----PREÇO: " + produto.getPreco());
         }
     }
+
+    public static void cadastrarUsuario(TipoUsuario tipoUsuario) {
+        Usuario usuario;
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Digite o nome do usuário: ");
+        String nome = scanner.nextLine();
+
+        if (tipoUsuario.equals(TipoUsuario.CLIENTE)) {
+            usuario = new Cliente(nome);
+        } else {
+            usuario = new Admin(nome);
+        }
+
+        usuarioDB.addUsuario(usuario);
+
+        System.out.println("Usuário adicionado com sucesso");
+    }
+
+    private static void listarUsuarios() {
+        List<Usuario> usuarios = usuarioDB.getUsuarios();
+
+        for (Usuario usuario : usuarios) {
+            System.out.println("----Nome: " + usuario.getNome());
+            System.out.println("----Tipo: " + usuario.getTipo());
+        }
+    }
+
 }
