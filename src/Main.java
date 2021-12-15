@@ -12,7 +12,7 @@ public class Main {
         System.out.println("Qual ID você deseja dar ao novo produto: ");
         int id = scanner.nextInt();
 
-        Produto produto = new Produto();git 
+        Produto produto = new Produto();
         produto.setId(1);
         produto.setDescricao("Celular");
 
