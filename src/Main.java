@@ -1,12 +1,17 @@
+import db.ProdutoDB;
 import models.Produto;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
+    static ProdutoDB produtoDB = new ProdutoDB();
+
     public static void main(String[] args) {
+
 
         System.out.println("---- PEDIDO DE VENDAS ----");
 
@@ -15,6 +20,7 @@ public class Main {
         int option;
         do {
             System.out.println("\n1 - Cadastrar produto");
+            System.out.println("2 - Listar produtos cadastrados");
             System.out.println("0 - Sair");
 
             Scanner scanner = new Scanner(System.in);
@@ -33,6 +39,9 @@ public class Main {
         switch (option) {
             case 1:
                 cadastrar();
+                break;
+            case 2:
+                listarProdutos();
                 break;
             case 0:
                 System.out.println("Encerrando...");
@@ -67,10 +76,21 @@ public class Main {
         produto.setDataValidade(dataValidade);
         produto.setPreco(preco);
 
+        produtoDB.addNovoProduto(produto);
         System.out.println("Produto criado com sucesso");
-        System.out.println("----ID: " + produto.getId());
-        System.out.println("----DESCRIÇÃO: " + produto.getDescricao());
-        System.out.println("----DATA DE VALIDADE: " + produto.getDataValidade());
-        System.out.println("----PREÇO: " + produto.getPreco());
+        
+    }
+
+    public static void listarProdutos() {
+
+        List<Produto> produtos = produtoDB.getProdutosList();
+
+        for (Produto produto : produtos) {
+
+            System.out.println("----ID: " + produto.getId());
+            System.out.println("----DESCRIÇÃO: " + produto.getDescricao());
+            System.out.println("----DATA DE VALIDADE: " + produto.getDataValidade());
+            System.out.println("----PREÇO: " + produto.getPreco());
+        }
     }
 }
