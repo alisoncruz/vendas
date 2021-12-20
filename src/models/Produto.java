@@ -1,6 +1,7 @@
 package models;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Produto {
     private int id;
@@ -18,35 +19,45 @@ public class Produto {
         this.dataValidade = dataValidade;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
     public int getId() {
         return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDescricao() {
         return this.descricao;
     }
 
-    public void setDataValidade(LocalDate dataValidade) {
-        this.dataValidade = dataValidade;
-    }
-
-    public void setPreco(Double preco) {
-        this.preco = preco;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public Double getPreco() {
         return preco;
     }
 
+    public void setPreco(Double preco) {
+        this.preco = preco;
+    }
+
     public LocalDate getDataValidade() {
         return dataValidade;
+    }
+
+    public void setDataValidade(LocalDate dataValidade) {
+        this.dataValidade = dataValidade;
+    }
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id=" + id +
+                ", descricao='" + descricao + '\'' +
+                ", preco=" + preco +
+                ", dataValidade=" + dataValidade +
+                '}';
     }
 }

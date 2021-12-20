@@ -1,9 +1,8 @@
 package db;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import models.Produto;
+
+import java.util.*;
 
 public class EstoquesDB {
 
@@ -13,18 +12,29 @@ public class EstoquesDB {
         return estoqueMap;
     }
 
-    public void addNovoEstoque(Estoque estoque){
+    public void addNovoEstoque(Estoque estoque) {
         getEstoqueMap().put(estoque.getId(), estoque);
     }
 
-    public List<Estoque> getEstoqueList(){
+    public List<Estoque> getEstoqueList() {
         List<Estoque> estoques = new ArrayList<>();
 
-        for(Map.Entry<String,Estoque> estoqueEntry: this.getEstoqueMap().entrySet()){
+        for (Map.Entry<String, Estoque> estoqueEntry : this.getEstoqueMap().entrySet()) {
             Estoque estoque = estoqueEntry.getValue();
             estoques.add(estoque);
         }
         return estoques;
+    }
+
+    public Estoque getEstoqueByProduto(Produto produto) {
+        Optional<Estoque> estoqueOptional = this.getEstoqueList().stream()
+                .filter(estoque -> estoque.getProduto().getId() == produto.getId()).findAny();
+        if (estoqueOptional.isPresent()) {
+            return estoqueOptional.get();
+        } else {
+            return null;
+        }
+
     }
 
 }

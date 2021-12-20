@@ -1,8 +1,6 @@
-import db.Estoque;
-import db.EstoquesDB;
-import db.ProdutoDB;
-import db.UsuarioDB;
+import db.*;
 import models.*;
+import validators.ValidadorPedidoVenda;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +12,7 @@ public class Main {
     static ProdutoDB produtoDB = new ProdutoDB();
     static UsuarioDB usuarioDB = new UsuarioDB();
     static EstoquesDB estoquesDB = new EstoquesDB();
+    static PedidoVendaDB pedidoVendaDB = new PedidoVendaDB();
 
     public static void main(String[] args) {
 
@@ -31,6 +30,8 @@ public class Main {
             System.out.println("5 - Listar usuários cadastrados");
             System.out.println("6 - Cadastro de estoque de produto");
             System.out.println("7 - Listar Estoques");
+            System.out.println("8 - Criar Pedido de Venda");
+            System.out.println("9 - Listar Pedidos de Venda");
             System.out.println("0 - Sair");
 
             Scanner scanner = new Scanner(System.in);
@@ -48,7 +49,7 @@ public class Main {
 
         switch (option) {
             case 1:
-                cadastrar();
+                cadastrarProduto();
                 break;
             case 2:
                 listarProdutos();
@@ -68,6 +69,12 @@ public class Main {
             case 7:
                 listarEstoques();
                 break;
+            case 8:
+                cadastrarPedido();
+                break;
+            case 9:
+                listarPedidos();
+                break;
             case 0:
                 System.out.println("Encerrando...");
                 break;
@@ -79,7 +86,57 @@ public class Main {
 
     }
 
-    public static void cadastrar() {
+    private static void listarPedidos() {
+
+        List<PedidoVenda> listaPedidos = pedidoVendaDB.getPedidoVendas();
+
+        listaPedidos.forEach(pedido -> {
+            System.out.println("ID: " + pedido.getId());
+            System.out.println("CLIENTE: " + pedido.getCliente());
+            System.out.println("PRODUTO: " + pedido.getProduto());
+            System.out.println("VALOR TOTAL : " + pedido.getValorTotal());
+        });
+    }
+
+    private static void cadastrarPedido() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Informe o ID do Cliente: ");
+        int idCliente = scanner.nextInt();
+
+
+        Cliente cliente = (Cliente) usuarioDB.getUsuarioPorId(idCliente);
+        System.out.println("ID: " + cliente.getId());
+        System.out.println("NOME: " + cliente.getNome());
+        System.out.println("TIPO: " + cliente.getTipo());
+
+        System.out.println("Informe o ID do Produto: ");
+        int idProduto = scanner.nextInt();
+
+        Produto produto = produtoDB.getProdutoByID(idProduto);
+        Estoque estoque = estoquesDB.getEstoqueByProduto(produto);
+
+        System.out.println("----ID: " + produto.getId());
+        System.out.println("----DESCRIÇÃO: " + produto.getDescricao());
+        System.out.println("----DATA DE VALIDADE: " + produto.getDataValidade());
+        System.out.println("----PREÇO: " + produto.getPreco());
+
+        System.out.println("Informe a quantidade: ");
+        int quantidade = scanner.nextInt();
+
+        PedidoVenda novoPedido = new PedidoVenda(cliente, produto, quantidade, estoque);
+
+        ValidadorPedidoVenda validadorPedidoVenda = new ValidadorPedidoVenda(novoPedido);
+
+        if (validadorPedidoVenda.ehValido()) {
+            pedidoVendaDB.addNovoPedido(novoPedido);
+            System.out.println("Pedido cadastrado com sucesso");
+        } else {
+            validadorPedidoVenda.getErros().stream().forEach(erro -> System.out.println(erro));
+        }
+    }
+
+    public static void cadastrarProduto() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Qual é a descrição que você deseja dar ao novo produto: ");

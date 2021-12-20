@@ -33,4 +33,13 @@ public abstract class Usuario {
     public void setTipo(TipoUsuario tipo) {
         this.tipo = tipo;
     }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", tipo=" + tipo +
+                '}';
+    }
 }
