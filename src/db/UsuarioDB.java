@@ -22,6 +22,7 @@ public class UsuarioDB {
 
     public Usuario getUsuarioPorId(int idCliente) {
         Usuario usuario = this.getUsuarios().stream().filter(u -> u.getId() == idCliente).findAny().orElse(null);
+        if(usuario == null) throw new RuntimeException("Usuário não cadastrado");
         return usuario;
     }
 }

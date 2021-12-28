@@ -8,7 +8,7 @@ public class PedidoVenda {
     private Produto produto;
     private int quantidade;
     private Double valorTotal;
-    Estoque estoque;
+    private Estoque estoque;
 
     public PedidoVenda() {
     }

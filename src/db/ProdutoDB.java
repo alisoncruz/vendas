@@ -27,6 +27,9 @@ public class ProdutoDB {
 
     public Produto getProdutoByID(int produtoId) {
         Produto produto = produtosList.get(produtoId);
+        if (produto == null) {
+            throw new RuntimeException("Produto não cadastrado.");
+        }
         return produto;
     }
 }

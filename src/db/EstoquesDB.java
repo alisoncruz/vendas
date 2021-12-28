@@ -32,7 +32,7 @@ public class EstoquesDB {
         if (estoqueOptional.isPresent()) {
             return estoqueOptional.get();
         } else {
-            return null;
+            throw new RuntimeException("Produto sem estoque.");
         }
 
     }
